@@ -4,6 +4,7 @@ import 'package:music_app_2/lib/Components/Colors/Colors.dart';
 import 'package:music_app_2/lib/Components/Text_sTyle/text_Style.dart';
 import 'package:music_app_2/lib/Controllers/Player%20Controller/Player_Controller.dart';
 import 'dart:io';
+import 'package:music_app_2/lib/Views/Song%20details/SongDetail.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -72,7 +73,10 @@ class _HomeState extends State<Home> {
                         songName,
                         style: ourStyle(family: bold, size: 15),
                       ),
-                      onTap: () => controller.playSong(songPath),
+                      onTap: () {
+                        controller.playSong(songPath); // Play the song
+                        Get.to(() => SongDetails(songPath: songPath, songName: songName)); // Navigate to SongDetails
+                      },
                       leading: FutureBuilder<bool>(
                         future: File(songPath).exists(),
                         builder: (context, artworkSnapshot) {
@@ -93,13 +97,11 @@ class _HomeState extends State<Home> {
                               ),
                             );
                           } else {
-                            // Fallback icon if no artwork is found
                             return Icon(Icons.music_note, color: whiteColor, size: 40);
                           }
                         },
                       ),
                       trailing: const Icon(Icons.play_arrow, color: whiteColor, size: 26),
-
                     ),
                   );
                 },
