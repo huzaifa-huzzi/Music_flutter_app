@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 
 class SongDetails extends StatelessWidget {
   final String songPath;
   final String songName;
   final String artistName;
 
-  const SongDetails({Key? key, required this.songPath, required this.songName, this.artistName = "Artist name"})
-      : super(key: key);
+  const SongDetails({super.key, required this.songPath, required this.songName, this.artistName = "Artist name"});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +15,7 @@ class SongDetails extends StatelessWidget {
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -30,11 +28,11 @@ class SongDetails extends StatelessWidget {
           Container(
             width: 250,
             height: 250,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.red, // Placeholder color for artwork background
               shape: BoxShape.circle,
             ),
-            child: Center(
+            child: const Center(
               child: Icon(
                 Icons.music_note,
                 color: Colors.black,
@@ -42,11 +40,11 @@ class SongDetails extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           // Song and artist information
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
@@ -54,19 +52,19 @@ class SongDetails extends StatelessWidget {
               children: [
                 Text(
                   songName,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   artistName,
                   style: TextStyle(fontSize: 18, color: Colors.grey[700]),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Song progress bar (dummy for now)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('0:00', style: TextStyle(color: Colors.black)),
+                    const Text('0:00', style: TextStyle(color: Colors.black)),
                     Expanded(
                       child: Slider(
                         value: 0.2, // Dummy value
@@ -75,12 +73,12 @@ class SongDetails extends StatelessWidget {
                         inactiveColor: Colors.grey,
                       ),
                     ),
-                    Text('4:00', style: TextStyle(color: Colors.black)),
+                    const Text('4:00', style: TextStyle(color: Colors.black)),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Playback controls
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Icon(Icons.skip_previous, color: Colors.black, size: 36),

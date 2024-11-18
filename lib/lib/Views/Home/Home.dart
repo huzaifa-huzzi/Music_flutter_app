@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
         future: controller.fetchSongs(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
                         future: File(songPath).exists(),
                         builder: (context, artworkSnapshot) {
                           if (artworkSnapshot.connectionState == ConnectionState.waiting) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           }
                           if (artworkSnapshot.hasData && artworkSnapshot.data!) {
                             return ClipRRect(
@@ -92,12 +92,12 @@ class _HomeState extends State<Home> {
                                 height: 50,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
-                                  return Icon(Icons.music_note, color: whiteColor, size: 40);
+                                  return const Icon(Icons.music_note, color: whiteColor, size: 40);
                                 },
                               ),
                             );
                           } else {
-                            return Icon(Icons.music_note, color: whiteColor, size: 40);
+                            return const Icon(Icons.music_note, color: whiteColor, size: 40);
                           }
                         },
                       ),
