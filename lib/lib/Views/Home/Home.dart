@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:music_app_2/lib/Components/Colors/Colors.dart';
 import 'package:music_app_2/lib/Components/Text_sTyle/text_Style.dart';
 import 'package:music_app_2/lib/Controllers/Player%20Controller/Player_Controller.dart';
+import 'dart:io';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,7 +22,10 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: bgDarkColor,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search, color: whiteColor))
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search, color: whiteColor),
+          ),
         ],
         leading: const Icon(Icons.sort_rounded, color: whiteColor, size: 25),
         title: Text('Beats', style: ourStyle(family: bold, size: 25)),
@@ -56,6 +60,7 @@ class _HomeState extends State<Home> {
                 itemBuilder: (BuildContext context, int index) {
                   var songPath = snapshot.data![index];
                   var songName = songPath.split('/').last;
+
                   return Container(
                     margin: const EdgeInsets.only(bottom: 4),
                     child: ListTile(
@@ -68,7 +73,31 @@ class _HomeState extends State<Home> {
                         style: ourStyle(family: bold, size: 15),
                       ),
                       onTap: () => controller.playSong(songPath),
-                      leading: const Icon(Icons.music_note, color: whiteColor, size: 32),
+                      leading: FutureBuilder<bool>(
+                        future: File(songPath).exists(),
+                        builder: (context, artworkSnapshot) {
+                          if (artworkSnapshot.connectionState == ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
+                          if (artworkSnapshot.hasData && artworkSnapshot.data!) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.file(
+                                File(songPath),
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(Icons.music_note, color: whiteColor, size: 40);
+                                },
+                              ),
+                            );
+                          } else {
+                            // Fallback icon if no artwork is found
+                            return Icon(Icons.music_note, color: whiteColor, size: 40);
+                          }
+                        },
+                      ),
                       trailing: const Icon(Icons.play_arrow, color: whiteColor, size: 26),
                     ),
                   );
