@@ -99,6 +99,7 @@ class _HomeState extends State<Home> {
                         },
                       ),
                       trailing: const Icon(Icons.play_arrow, color: whiteColor, size: 26),
+
                     ),
                   );
                 },
