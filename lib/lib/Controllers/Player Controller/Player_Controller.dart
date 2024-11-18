@@ -10,7 +10,7 @@ class PlayerController extends GetxController {
   Future<List<String>> fetchSongs() async {
     var permissionStatus = await Permission.storage.request();
     if (permissionStatus.isGranted) {
-      // Pick audio files using File Picker
+      // Picking audio files using File Picker
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.audio,
         allowMultiple: true,
