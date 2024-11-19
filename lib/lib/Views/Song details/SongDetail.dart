@@ -22,7 +22,7 @@ class SongDetails extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
-            controller.stopSong(); // Stop the song when leaving the screen
+            controller.stopSong();
           },
         ),
       ),
@@ -34,7 +34,7 @@ class SongDetails extends StatelessWidget {
             width: 250,
             height: 250,
             decoration: const BoxDecoration(
-              color: Colors.red, // Placeholder color for artwork background
+              color: Colors.red,
               shape: BoxShape.circle,
             ),
             child: const Center(

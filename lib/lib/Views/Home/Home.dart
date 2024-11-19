@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
                       ),
                       onTap: () {
                         controller.playSong(songPath); // Play the song
-                        Get.to(() => SongDetails(songPath: songPath, songName: songName)); // Navigate to SongDetails
+                        Get.to(() => SongDetails(songPath: songPath, songName: songName));
                       },
                       leading: FutureBuilder<bool>(
                         future: File(songPath).exists(),
