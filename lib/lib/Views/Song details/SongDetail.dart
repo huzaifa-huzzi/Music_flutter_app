@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:music_app_2/lib/Controllers/Player%20Controller/Player_Controller.dart';
 
 class SongDetails extends StatelessWidget {
   final String songPath;
@@ -9,6 +11,8 @@ class SongDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<PlayerController>();
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -18,13 +22,14 @@ class SongDetails extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
+            controller.stopSong(); // Stop the song when leaving the screen
           },
         ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Circular artwork container
+          // Circular artwork container (optional)
           Container(
             width: 250,
             height: 250,
@@ -60,30 +65,70 @@ class SongDetails extends StatelessWidget {
                   style: TextStyle(fontSize: 18, color: Colors.grey[700]),
                 ),
                 const SizedBox(height: 20),
-                // Song progress bar (dummy for now)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('0:00', style: TextStyle(color: Colors.black)),
-                    Expanded(
-                      child: Slider(
-                        value: 0.2, // Dummy value
-                        onChanged: (value) {},
-                        activeColor: Colors.purple,
-                        inactiveColor: Colors.grey,
+                // Song progress bar
+                Obx(() {
+                  String formatDuration(Duration duration) {
+                    String twoDigits(int n) => n.toString().padLeft(2, '0');
+                    final minutes = twoDigits(duration.inMinutes);
+                    final seconds = twoDigits(duration.inSeconds.remainder(60));
+                    return '$minutes:$seconds';
+                  }
+
+                  final currentTime = formatDuration(Duration(seconds: controller.progress.value.toInt()));
+                  final totalTime = controller.audioPlayer.duration != null
+                      ? formatDuration(controller.audioPlayer.duration!)
+                      : '00:00';
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(currentTime, style: const TextStyle(color: Colors.black)),
+                      Expanded(
+                        child: Slider(
+                          value: controller.progress.value,
+                          max: controller.audioPlayer.duration?.inSeconds.toDouble() ?? 0.0,
+                          onChanged: (value) {
+                            controller.audioPlayer.seek(Duration(seconds: value.toInt()));
+                          },
+                          activeColor: Colors.purple,
+                          inactiveColor: Colors.grey,
+                        ),
                       ),
-                    ),
-                    const Text('4:00', style: TextStyle(color: Colors.black)),
-                  ],
-                ),
+                      Text(totalTime, style: const TextStyle(color: Colors.black)),
+                    ],
+                  );
+                }),
                 const SizedBox(height: 20),
                 // Playback controls
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(Icons.skip_previous, color: Colors.black, size: 36),
-                    Icon(Icons.play_circle_fill, color: Colors.black, size: 50),
-                    Icon(Icons.skip_next, color: Colors.black, size: 36),
+                    IconButton(
+                      icon: const Icon(Icons.skip_previous, color: Colors.black, size: 36),
+                      onPressed: () => controller.previousSong(),
+                    ),
+                    Obx(() {
+                      return IconButton(
+                        icon: Icon(
+                          controller.isPlaying.value
+                              ? Icons.pause_circle_filled
+                              : Icons.play_circle_fill,
+                          color: Colors.black,
+                          size: 50,
+                        ),
+                        onPressed: () {
+                          if (controller.isPlaying.value) {
+                            controller.pauseSong();
+                          } else {
+                            controller.playSong(songPath);
+                          }
+                        },
+                      );
+                    }),
+                    IconButton(
+                      icon: const Icon(Icons.skip_next, color: Colors.black, size: 36),
+                      onPressed: () => controller.nextSong(),
+                    ),
                   ],
                 ),
               ],
