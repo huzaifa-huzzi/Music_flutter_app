@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
                         style: ourStyle(family: bold, size: 15),
                       ),
                       onTap: () {
-                        controller.playSong(songPath); // Play the song
+                        controller.playSong(songPath);
                         Get.to(() => SongDetails(songPath: songPath, songName: songName));
                       },
                       leading: FutureBuilder<bool>(

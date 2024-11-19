@@ -6,23 +6,22 @@ import 'package:file_picker/file_picker.dart';
 class PlayerController extends GetxController {
   final AudioPlayer audioPlayer = AudioPlayer();
   List<String> songs = [];
-  int currentIndex = 0; // To track the current song index
+  int currentIndex = 0;
 
-  RxBool isPlaying = false.obs; // Track if the song is playing
-  RxDouble progress = 0.0.obs; // To store song progress
+  RxBool isPlaying = false.obs;
+  RxDouble progress = 0.0.obs;
 
-  bool _isFilePickerActive = false; // Flag to prevent multiple file picker calls
+  bool _isFilePickerActive = false;
 
   // Fetch songs from storage
   Future<List<String>> fetchSongs() async {
     if (_isFilePickerActive) {
-      // Prevent multiple file picker actions at once
       return Future.error('File picker is already active.');
     }
 
     var permissionStatus = await Permission.storage.request();
     if (permissionStatus.isGranted) {
-      _isFilePickerActive = true; // Mark the picker as active
+      _isFilePickerActive = true;
 
       // Pick audio files using File Picker
       FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -30,7 +29,7 @@ class PlayerController extends GetxController {
         allowMultiple: true,
       );
 
-      _isFilePickerActive = false; // Reset the flag once the picker is done
+      _isFilePickerActive = false;
 
       if (result != null) {
         songs = result.paths.whereType<String>().toList();
