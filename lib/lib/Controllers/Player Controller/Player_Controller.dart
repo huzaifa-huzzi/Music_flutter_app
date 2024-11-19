@@ -1,39 +1,56 @@
-
-import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class PlayerController extends GetxController {
-  final AudioPlayer audioPlayer = AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  var currentSong = ''.obs;
+  var isPlaying = false.obs;
+  var duration = Duration.zero.obs;
+  var position = Duration.zero.obs;
 
-  Future<List<String>> fetchSongs() async {
-    var permissionStatus = await Permission.storage.request();
-    if (permissionStatus.isGranted) {
-      // Picking audio files using File Picker
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.audio,
-        allowMultiple: true,
-      );
+  @override
+  void onInit() {
+    super.onInit();
+    _audioPlayer.positionStream.listen((pos) {
+      position.value = pos;
+    });
+    _audioPlayer.durationStream.listen((dur) {
+      duration.value = dur ?? Duration.zero;
+    });
+    _audioPlayer.playerStateStream.listen((state) {
+      isPlaying.value = state.playing;
+    });
+  }
 
-      if (result != null) {
-        return result.paths.whereType<String>().toList();
-      } else {
-        return Future.error('No songs selected');
-      }
-    } else {
-      return Future.error('Permission denied');
+  Future<void> playSong(String path) async {
+    try {
+      currentSong.value = path;
+      await _audioPlayer.setFilePath(path);
+      await _audioPlayer.play();
+    } catch (e) {
+      print("Error playing song: $e");
     }
   }
 
-  void playSong(String songPath) {
-    audioPlayer.setFilePath(songPath);
-    audioPlayer.play();
+  void pauseSong() {
+    _audioPlayer.pause();
+  }
+
+  void resumeSong() {
+    _audioPlayer.play();
+  }
+
+  void stopSong() {
+    _audioPlayer.stop();
+  }
+
+  void seekSong(Duration position) {
+    _audioPlayer.seek(position);
   }
 
   @override
   void onClose() {
-    audioPlayer.dispose();
+    _audioPlayer.dispose();
     super.onClose();
   }
 }
