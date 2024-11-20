@@ -90,7 +90,7 @@ class SongDetails extends StatelessWidget {
                           onChanged: (value) {
                             controller.audioPlayer.seek(Duration(seconds: value.toInt()));
                           },
-                          activeColor: Colors.purple,
+                          activeColor: Colors.red,
                           inactiveColor: Colors.grey,
                         ),
                       ),
